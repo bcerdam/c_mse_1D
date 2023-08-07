@@ -44,7 +44,7 @@ double calculate_U_m(double* data, int m, double r, int num_entries, double delt
     double sum = 0.0;
     double size = (double)(num_entries - m);
     #pragma omp parallel for reduction(+:sum) num_threads(32)
-    for(int i = 0; i < size; i++){
+    for(int i = 0; i < (int)size; i++){
         sum += calculate_U_ij_m(data, i, m, r, num_entries, delta, fuzzy, distance_type, window_size, min, max);
     }
     #pragma omp barrier
