@@ -3,6 +3,7 @@ import time
 import numpy as np
 import subprocess
 import utils
+import json
 
 def info_matriz(csv_path):
     data_array = np.genfromtxt(csv_path, delimiter=',')
@@ -59,42 +60,28 @@ def mse_1d(folder_path, scales, m, r, fuzzy, method, delta=0.7, distance_type=0,
 # gcc -o core_c/executables/mse_1d core_c/scripts/mse_1d.c core_c/scripts/read_csv.c core_c/scripts/signal_std.c core_c/scripts/utils.c  -lm -Icore_c/headers
 # clang -Xclang -fopenmp -I/usr/local/opt/libomp/include -L/opt/homebrew/Cellar/libomp/16.0.6/lib -lomp -Icore_c/headers core_c/scripts/mse_1d.c core_c/scripts/read_csv.c core_c/scripts/signal_std.c core_c/scripts/utils.c -o core_c/executables/mse_1d_p
 
-# v = mse_1d('/Users/brunocerdamardini/Desktop/repo/c_mse_1D/datos/HRV/hrv_sc_wp', 10, 2, 0.05, True, 'RCMSE', delta=0.8, std_type='UNIQUE_VALUES')
-# mse_b = []
-# mse_c = []
-# mse_e = []
-# for x in v:
-#     if 'B' in x[0]:
-#         mse_b.append(np.array(x[1]))
-#     elif 'C' in x[0]:
-#         mse_c.append(np.array(x[1]))
-#     elif 'E' in x[0]:
-#         mse_e.append(np.array(x[1]))
+
+# ['HRVSB', 'HRVSC', 'HRVSE']
+
+# Promedio: [0.8776156435954757, 0.8638387142837791, 0.9292345608368804]
+
+# Desviacion Estandar: [0.036897335874133394, 0.034874328840382926, 0.04398955255410731]
+
+# Varianza: [0.0016309201594386243, 0.0016602733746504852, 0.002341552903543662]
+
+
+# import os
 #
-# import numpy as np
+# folder_path = '/Users/brunocerdamardini/Desktop/repo/c_mse_1D/datos/HRV/hrv_sc_wp'
+# for item in os.listdir(folder_path):
+#     item_path = os.path.join(folder_path, item)
 #
-#
-# def calculate_average_positions(arrays_list):
-#     """
-#     Calculate the average of positions across the given list of one-dimensional NumPy arrays.
-#     Args:
-#         arrays_list (list): A list of one-dimensional NumPy arrays.
-#     Returns:
-#         numpy.ndarray: An array representing the averaged values at each position.
-#     """
-#     # Ensure all arrays have the same length
-#     array_lengths = set(len(arr) for arr in arrays_list)
-#     if len(array_lengths) > 1:
-#         raise ValueError("All arrays must have the same length.")
-#     # Stack the arrays into a 2D array where each row corresponds to one array
-#     stacked_arrays = np.stack(arrays_list)
-#     # Calculate the average along the first axis (axis=0) to get the average of positions
-#     averaged_positions = np.mean(stacked_arrays, axis=0)
-#     return averaged_positions
-#
-#
-# b_array = calculate_average_positions(mse_b)
-# c_array = calculate_average_positions(mse_c)
-# e_array = calculate_average_positions(mse_e)
-# v = [['hrvsb', list(b_array)], ['hrvsc', list(c_array)], ['hrvse', list(e_array)]]
-# utils.plot_arrays(v, title='Fuzzy RCMSE 1D ; m=2 ; r=0.15 ; delta=0.8 ; std=valores_unicos', xlabel='Scales', ylabel='Entropy')
+#     if 'B' in item:
+#         file = np.genfromtxt(item_path, delimiter=',')
+#         b.append(np.mean(file))
+#     elif 'C' in item:
+#         file = np.genfromtxt(item_path, delimiter=',')
+#         c.append(np.mean(file))
+#     elif 'E' in item:
+#         file = np.genfromtxt(item_path, delimiter=',')
+#         e.append(np.mean(file))
